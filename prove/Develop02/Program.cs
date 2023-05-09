@@ -2,150 +2,149 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace JournalApp
+namespace JournalProgram
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Journal journal = new Journal();
-            string input;
+            Journal myJournal = new Journal();
+            string menuOption;
 
             do
             {
-                Console.WriteLine("Journal App");
+                Console.WriteLine("\nWelcome to your journal!");
+                Console.WriteLine("Choose an option:");
                 Console.WriteLine("1. Write a new entry");
                 Console.WriteLine("2. Display the journal");
                 Console.WriteLine("3. Save the journal to a file");
                 Console.WriteLine("4. Load the journal from a file");
                 Console.WriteLine("5. Quit");
-                Console.Write("Enter your choice: ");
 
-                input = Console.ReadLine();
+                menuOption = Console.ReadLine();
 
-                switch (input)
+                switch (menuOption)
                 {
                     case "1":
-                        journal.WriteNewEntry();
+                        myJournal.AddEntry();
                         break;
                     case "2":
-                        journal.DisplayJournal();
+                        myJournal.DisplayEntries();
                         break;
                     case "3":
-                        journal.SaveJournalToFile();
+                        myJournal.SaveToFile();
                         break;
                     case "4":
-                        journal.LoadJournalFromFile();
+                        myJournal.LoadFromFile();
                         break;
                     case "5":
                         Console.WriteLine("Goodbye!");
                         break;
                     default:
-                        Console.WriteLine("Invalid choice.");
+                        Console.WriteLine("Invalid option. Please try again.");
                         break;
                 }
-
-                Console.WriteLine();
-            } while (input != "5");
+            } while (menuOption != "5");
         }
     }
 
     class Journal
     {
         private List<Entry> entries;
-        private List<string> prompts;
 
         public Journal()
         {
             entries = new List<Entry>();
-            prompts = new List<string> {
-                "Who was the most interesting person I interacted with today?",
-                "What was the best part of my day?",
-                "How did I see the hand of the Lord in my life today?",
-                "What was the strongest emotion I felt today?",
-                "If I had one thing I could do over today, what would it be?"
-            };
         }
 
-        public void WriteNewEntry()
+        public void AddEntry()
         {
-            Console.Clear();
-            Console.WriteLine("New Entry");
-            Console.WriteLine();
-
-            // select a random prompt
-            Random random = new Random();
-            int index = random.Next(prompts.Count);
-            string prompt = prompts[index];
-
-            Console.WriteLine(prompt);
+            string prompt = GetRandomPrompt();
+            Console.WriteLine("Prompt: " + prompt);
             Console.Write("Response: ");
             string response = Console.ReadLine();
+            DateTime date = DateTime.Now;
 
-            // create a new entry and add it to the list of entries
-            Entry entry = new Entry(prompt, response, DateTime.Now.ToString());
-            entries.Add(entry);
-
-            Console.WriteLine();
-            Console.WriteLine("Entry added.");
+            Entry newEntry = new Entry(prompt, response, date);
+            entries.Add(newEntry);
         }
 
-        public void DisplayJournal()
+        public void DisplayEntries()
         {
-            Console.Clear();
-            Console.WriteLine("Journal");
-            Console.WriteLine();
-
-            // iterate through all entries and display them
-            foreach (Entry entry in entries)
+            if (entries.Count == 0)
             {
-                Console.WriteLine(entry.Prompt);
-                Console.WriteLine(entry.Response);
-                Console.WriteLine(entry.Date);
-                Console.WriteLine();
+                Console.WriteLine("Your journal is empty.");
+            }
+            else
+            {
+                Console.WriteLine("Your journal entries:");
+                foreach (Entry entry in entries)
+                {
+                    Console.WriteLine("Date: " + entry.Date);
+                    Console.WriteLine("Prompt: " + entry.Prompt);
+                    Console.WriteLine("Response: " + entry.Response);
+                    Console.WriteLine();
+                }
             }
         }
 
-        public void SaveJournalToFile()
+        public void SaveToFile()
         {
-            Console.Clear();
-            Console.WriteLine("Save Journal");
-            Console.WriteLine();
-
-            Console.Write("Enter filename: ");
+            Console.Write("Enter a filename: ");
             string filename = Console.ReadLine();
 
             try
             {
-                // create a new file and write each entry to a line in the file
                 using (StreamWriter writer = new StreamWriter(filename))
                 {
                     foreach (Entry entry in entries)
                     {
-                        writer.WriteLine($"{entry.Prompt},{entry.Response},{entry.Date}");
+                        writer.WriteLine(entry.Date);
+                        writer.WriteLine(entry.Prompt);
+                        writer.WriteLine(entry.Response);
                     }
                 }
-
-                Console.WriteLine();
-                Console.WriteLine("Journal saved.");
+                Console.WriteLine("Journal saved to file.");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine();
-                Console.WriteLine($"Error saving journal: {e.Message}");
+                Console.WriteLine("Error saving journal to file: " + ex.Message);
             }
         }
 
-        public void LoadJournalFromFile()
+        public void LoadFromFile()
         {
-            Console.Clear();
-            Console.WriteLine("Load Journal");
-            Console.WriteLine();
-
-            Console.Write("Enter filename: ");
+            Console.Write("Enter a filename: ");
             string filename = Console.ReadLine();
 
             try
             {
-                // clear the current list of entries
-                entries.Clear
+                using (StreamReader reader = new StreamReader(filename))
+                {
+                    entries.Clear();
+
+                    while (!reader.EndOfStream)
+                    {
+                        DateTime date = DateTime.Parse(reader.ReadLine());
+                        string prompt = reader.ReadLine();
+                        string response = reader.ReadLine();
+
+                        Entry newEntry = new Entry(prompt, response, date);
+                        entries.Add(newEntry);
+                    }
+                }
+                Console.WriteLine("Journal loaded from file.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error loading journal from file: " + ex.Message);
+            }
+        }
+
+        private string GetRandomPrompt()
+        {
+            List<string> prompts = new List<string>
+            {
+                "Who was the most interesting person I interacted with today?",
+                "What was the best part of my day?",
+                "How did I see the hand of the Lord in my life today?",
