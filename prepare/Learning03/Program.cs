@@ -1,61 +1,39 @@
 using System;
 
-public class Fraction
+class Program
 {
-    private int _top = 0;
-    private int _bottom = 0;
+    static void Main(string[] args)
+    {
+        // Console.WriteLine("Hello Learning03 World!");
 
-    // Constructor with no parameters initializes to 1/1
-    public Fraction()
-    {
-        _top = 1;
-        _bottom = 1;
-    }
-    // Constructor with one parameters for top and initializes bottom to 1
-    public Fraction(int wholeNumber)
-    {
-        _top = wholeNumber;
-        _bottom = 1;
-    }
-    // Constructor with two parameters for top and bottom
-    public Fraction(int top, int bottom)
-    {
-        _top = top;
-        _bottom = bottom;
-    }
+        // Step 5 Getters and Setters
+        Fraction f1 = new Fraction();
+        f1.SetTop(3);
+        f1.SetBottom(4);
 
-    public int GetTop()
-    {
-        return _top;
-    }
+        Console.WriteLine(f1.GetTop());
+        Console.WriteLine(f1.GetBottom());a
 
-    public void SetTop(int top)
-    {
-        _top = top;
-    }
+        // Step 6 return methods
+        Fraction f3 = new Fraction();
+        Console.WriteLine(f3.GetFractionString());
+        Console.WriteLine(f3.GetDecimalValue());
 
-    public int GetBottom()
-    {
-        return _bottom;
-    }
-    public void SetBottom(int bottom)
-    {
-        _bottom = bottom;
-    }
+        Fraction f4 = new Fraction(6);
+        Console.WriteLine(f4.GetFractionString());
+        Console.WriteLine(f4.GetDecimalValue());
 
-    public string GetFractionString()
-    {
-        string text = $"{_top}/{_bottom}";
-        return text;
+        Fraction f5 = new Fraction(6, 7);
+        Console.WriteLine(f5.GetFractionString());
+        Console.WriteLine(f5.GetDecimalValue());
+
+        Fraction f6 = new Fraction(3, 4);
+        Console.WriteLine(f6.GetFractionString());
+        Console.WriteLine(f6.GetDecimalValue());
+
+        Fraction f7 = new Fraction(6, 12);
+        Console.WriteLine(f7.GetFractionString());
+        Console.WriteLine(f7.GetDecimalValue());
+
     }
-
-    public double GetDecimalValue()
-    {
-        return (double)_top / (double)_bottom;
-    }
-
-
 }
-
-
-
