@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-class Spinner
+public class Spinner
 {
     private bool isSpinning;
     private Thread spinnerThread;
@@ -25,59 +25,33 @@ class Spinner
         {
             Console.Write("/");
             Thread.Sleep(100);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Console.Write("\b");
             Console.Write("-");
             Thread.Sleep(100);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Console.Write("\b");
             Console.Write("\\");
             Thread.Sleep(100);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Console.Write("\b");
             Console.Write("|");
             Thread.Sleep(100);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Console.Write("\b");
         }
     }
 }
 
-class Program
+public class Program
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        Console.WriteLine("Welcome to the Spinner Activity!");
-        Console.WriteLine("This activity will display a spinning animation using a custom Spinner class.");
-
-        int duration = GetDurationFromUser();
-
-        Console.WriteLine("Starting spinner activity...");
-
         Spinner spinner = new Spinner();
         spinner.Start();
 
-        Thread.Sleep(duration * 1000); // Convert seconds to milliseconds
+        // Simulating some work
+        Thread.Sleep(3000);
 
         spinner.Stop();
 
-        Console.WriteLine("Spinner activity completed!");
-
-        // Standard finishing message for all activities
-        Console.WriteLine("Thank you for participating. Have a great day!");
+        Console.WriteLine("Spinner stopped.");
         Console.ReadLine();
-    }
-
-    static int GetDurationFromUser()
-    {
-        int duration;
-        while (true)
-        {
-            Console.Write("Enter the duration in seconds: ");
-            if (int.TryParse(Console.ReadLine(), out duration) && duration > 0)
-            {
-                return duration;
-            }
-            else
-            {
-                Console.WriteLine("Invalid input. Please enter a positive integer value.");
-            }
-        }
     }
 }
