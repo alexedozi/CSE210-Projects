@@ -1,43 +1,19 @@
-using System;
-using System.Threading;
-
-class BreathingActivity
+public class BreathingActivity : Activity
 {
-    private int duration;
-
-    public BreathingActivity(int duration)
+    public BreathingActivity()
     {
-        this.duration = duration;
+        name = "Breathing";
+        description = "This activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.";
     }
 
-    public void Start()
+    protected override void RunActivity()
     {
-        Console.WriteLine("Breathing Activity");
-        Console.WriteLine("This activity will help you relax by walking you through breathing in and out slowly.");
-        Console.WriteLine("Clear your mind and focus on your breathing.");
-
-        Console.WriteLine($"Starting the breathing activity for {duration} seconds...");
-        Thread.Sleep(2000); // Pause for 2 seconds before starting
-
-        for (int i = 0; i < duration; i++)
+        for (int i = 0; i < duration; i += 2)
         {
             Console.WriteLine("Breathe in...");
-            ShowCountdown();
-
+            Pause(1);
             Console.WriteLine("Breathe out...");
-            ShowCountdown();
+            Pause(1);
         }
-
-        Console.WriteLine("Breathing activity complete.");
-    }
-
-    private void ShowCountdown()
-    {
-        for (int i = 3; i >= 1; i--)
-        {
-            Console.Write($"{i}...");
-            Thread.Sleep(1000); // Pause for 1 second
-        }
-        Console.WriteLine();
     }
 }

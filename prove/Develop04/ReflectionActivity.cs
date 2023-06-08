@@ -1,82 +1,47 @@
-using System;
-using System.Threading;
-
-class ReflectionActivity
+public class ReflectionActivity : Activity
 {
-    static void Main()
+    private string[] prompts = {
+        "Think of a time when you stood up for someone else.",
+        "Think of a time when you did something really difficult.",
+        "Think of a time when you helped someone in need.",
+        "Think of a time when you did something truly selfless."
+    };
+
+    private string[] questions = {
+        "Why was this experience meaningful to you?",
+        "Have you ever done anything like this before?",
+        "How did you get started?",
+        "How did you feel when it was complete?",
+        "What made this time different than other times when you were not as successful?",
+        "What is your favorite thing about this experience?",
+        "What could you learn from this experience that applies to other situations?",
+        "What did you learn about yourself through this experience?",
+        "How can you keep this experience in mind in the future?"
+    };
+
+    public ReflectionActivity()
     {
-        Console.WriteLine("Welcome to the Reflection Activity!");
+        name = "Reflection";
+        description = "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.";
+    }
 
-        // Prompt for duration
-        Console.Write("Please enter the duration of this activity in seconds: ");
-        int duration = int.Parse(Console.ReadLine());
+    protected override void RunActivity()
+    {
+        Random random = new Random();
+        int questionIndex = random.Next(0, prompts.Length);
 
-        // Description of the activity
-        Console.WriteLine("This activity will help you reflect on times in your life when you have shown strength and resilience.");
-        Console.WriteLine("This will help you recognize the power you have and how you can use it in other aspects of your life.");
-
-        // Array of prompts
-        string[] prompts = {
-            "Think of a time when you stood up for someone else.",
-            "Think of a time when you did something really difficult.",
-            "Think of a time when you helped someone in need.",
-            "Think of a time when you did something truly selfless."
-        };
-
-        // Array of questions
-        string[] questions = {
-            "Why was this experience meaningful to you?",
-            "Have you ever done anything like this before?",
-            "How did you get started?",
-            "How did you feel when it was complete?",
-            "What made this time different than other times when you were not as successful?",
-            "What is your favorite thing about this experience?",
-            "What could you learn from this experience that applies to other situations?",
-            "What did you learn about yourself through this experience?",
-            "How can you keep this experience in mind in the future?"
-        };
-
-        // Random number generator
-        Random rand = new Random();
-
-        // Start time
-        DateTime startTime = DateTime.Now;
-
-        // Perform reflection activity for the specified duration
-        while ((DateTime.Now - startTime).TotalSeconds < duration)
+        for (int i = 0; i < duration; i += questions.Length)
         {
-            // Display a random prompt
-            string prompt = prompts[rand.Next(prompts.Length)];
-            Console.WriteLine(prompt);
+            Console.WriteLine(prompts[questionIndex]);
+            Pause(2);
 
-            // Pause for several seconds with spinner animation
-            Console.Write("Reflecting");
-            for (int i = 0; i < 3; i++)
-            {
-                Thread.Sleep(500);
-                Console.Write(".");
-            }
-            Console.WriteLine();
-
-            // Ask random questions
             foreach (string question in questions)
             {
                 Console.WriteLine(question);
-
-                // Pause for several seconds with spinner animation
-                Console.Write("Reflecting");
-                for (int i = 0; i < 3; i++)
-                {
-                    Thread.Sleep(500);
-                    Console.Write(".");
-                }
-                Console.WriteLine();
+                Pause(3);
             }
+
+            questionIndex = random.Next(0, prompts.Length);
         }
-
-        Console.WriteLine("Reflection activity completed. Thank you!");
-
-        // Wait for user input to exit
-        Console.ReadLine();
     }
 }
