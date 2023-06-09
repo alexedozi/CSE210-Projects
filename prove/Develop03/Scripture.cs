@@ -1,76 +1,47 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-// A code template for the category of things known as 
 public class Scripture
 {
-    // Variables
-    public List<Scripture> _scripture = new List<Scripture>();
-    private string _fileName = "DataText.txt";
-    private string _key;
-    private string _text;
-    public int _index;
-    public string _scriptureText;
+    private string reference;
+    private List<Word> words;
 
-
-    // Methods
-    public void LoadScriptures()
+    public Scripture(string reference, string text)
     {
-        List<string> readText = File.ReadAllLines(_fileName).Where(arg => !string.IsNullOrWhiteSpace(arg)).ToList();
-
-        foreach (string line in readText)
-        {
-            string[] entries = line.Split(";");
-
-            Scripture entry = new Scripture();
-
-            entry._key = entries[0];
-            entry._text = entries[6];
-
-            _scripture.Add(entry);
-        }
+        this.reference = reference;
+        words = text.Split(' ')
+                    .Select(word => new Word(word))
+                    .ToList();
     }
 
-    public void ScriptureDisplay()
+    public string GetReference()
     {
-        foreach (Scripture item in _scripture)
-        {
-            item.ShowScripture();
-        }
-    }
-    public void ShowScripture()
-    {
-        Console.WriteLine($"\n{_text}");
+        return reference;
     }
 
-    public int GetRandomIndex()
+    public string GetText(bool hideWords)
     {
-        var random = new Random();
-        _index = random.Next(_scripture.Count);
-        return _index;
+        if (!hideWords)
+            return string.Join(" ", words.Select(word => word.GetWordText()));
+
+        return string.Join(" ", words.Select(word => word.IsHidden() ? "__" : word.GetWordText()));
     }
 
-    public string Get_scriptureText()
+    public bool HideNextWord()
     {
-        return _scriptureText;
+        List<Word> unhiddenWords = words.Where(word => !word.IsHidden()).ToList();
+        if (unhiddenWords.Count == 0)
+            return false;
+
+        Random random = new Random();
+        int randomIndex = random.Next(0, unhiddenWords.Count);
+        unhiddenWords[randomIndex].Hide();
+        return true;
     }
 
-    public string RandomScripture(string _scriptureText)
+    public bool AreAllWordsHidden()
     {
-        _index = GetRandomIndex();
-       return _scriptureText = _scripture[_index]._text;
+        return words.All(word => word.IsHidden());
     }
-    public void HideWords()
-    {
-
-    }
-    public void GetRenderedText()
-    {
-
-    }
-    public void IsCompletelyHidden()
-    {
-
-    }
-
-
 }
