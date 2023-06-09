@@ -1,43 +1,57 @@
-class Program
+public class Program
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        bool exit = false;
-        while (!exit)
+        while (true)
         {
-            Console.WriteLine("Select an activity:");
-            Console.WriteLine("1. Breathing");
-            Console.WriteLine("2. Reflection");
-            Console.WriteLine("3. Listing");
-            Console.WriteLine("4. Exit");
-            Console.Write("Enter your choice: ");
+            DisplayMenu();
+            int choice = GetMenuChoice();
 
-            int choice = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
-
-            Activity activity;
             switch (choice)
             {
                 case 1:
-                    activity = new BreathingActivity();
-                    activity.Run();
+                    BreathingActivity breathingActivity = new BreathingActivity();
+                    breathingActivity.Start();
                     break;
                 case 2:
-                    activity = new ReflectionActivity();
-                    activity.Run();
+                    ReflectionActivity reflectionActivity = new ReflectionActivity();
+                    reflectionActivity.Start();
                     break;
                 case 3:
-                    activity = new ListingActivity();
-                    activity.Run();
+                    ListingActivity listingActivity = new ListingActivity();
+                    listingActivity.Start();
                     break;
                 case 4:
-                    exit = true;
-                    break;
+                    Console.WriteLine("Goodbye!");
+                    return;
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
-                    Console.WriteLine();
                     break;
             }
+
+            Console.WriteLine();
+        }
+    }
+
+    private static void DisplayMenu()
+    {
+        Console.WriteLine("===== Activity Menu =====");
+        Console.WriteLine("1. Breathing Activity");
+        Console.WriteLine("2. Reflection Activity");
+        Console.WriteLine("3. Listing Activity");
+        Console.WriteLine("4. Exit");
+    }
+
+    private static int GetMenuChoice()
+    {
+        while (true)
+        {
+            Console.Write("Enter your choice: ");
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice >= 1 && choice <= 4)
+            {
+                return choice;
+            }
+            Console.WriteLine("Invalid choice. Please enter a valid menu number.");
         }
     }
 }

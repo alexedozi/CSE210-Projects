@@ -1,6 +1,6 @@
 public class ListingActivity : Activity
 {
-    private string[] prompts = {
+    private static readonly string[] prompts = {
         "Who are people that you appreciate?",
         "What are personal strengths of yours?",
         "Who are people that you have helped this week?",
@@ -8,32 +8,48 @@ public class ListingActivity : Activity
         "Who are some of your personal heroes?"
     };
 
-    public ListingActivity()
+    public ListingActivity() : base("Listing Activity", "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.")
     {
-        name = "Listing";
-        description = "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.";
     }
 
-    protected override void RunActivity()
+    protected override void DoActivity(int duration)
     {
+        Console.WriteLine("Let's begin the listing activity.");
+        Thread.Sleep(2000);
+
         Random random = new Random();
-        int promptIndex = random.Next(0, prompts.Length);
-        int count = 0;
+        string prompt = prompts[random.Next(prompts.Length)];
 
-        Console.WriteLine(prompts[promptIndex]);
-        Pause(3);
+        Console.WriteLine("\n" + prompt);
+        Thread.Sleep(5000);
 
-        DateTime endTime = DateTime.Now.AddSeconds(duration);
-        while (DateTime.Now < endTime)
+        DateTime startTime = DateTime.Now;
+        List<string> items = ListItems(duration);
+
+        DisplayItemCount(items);
+    }
+
+    private List<string> ListItems(int duration)
+    {
+        List<string> items = new List<string>();
+        DateTime startTime = DateTime.Now;
+
+        while ((DateTime.Now - startTime).TotalSeconds < duration)
         {
-            Console.Write("Enter an item: ");
+            Console.Write("Enter an item (or 'done' to finish): ");
             string item = Console.ReadLine();
-            count++;
+
+            if (item.ToLower() == "done")
+                break;
+
+            items.Add(item);
         }
 
-        Console.WriteLine();
-        Console.WriteLine("Number of items listed: " + count);
-        Pause(3);
-        Console.WriteLine();
+        return items;
+    }
+
+    private void DisplayItemCount(List<string> items)
+    {
+        Console.WriteLine($"\nYou listed {items.Count} items.");
     }
 }

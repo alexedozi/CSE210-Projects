@@ -1,13 +1,13 @@
 public class ReflectionActivity : Activity
 {
-    private string[] prompts = {
+    private static readonly string[] prompts = {
         "Think of a time when you stood up for someone else.",
         "Think of a time when you did something really difficult.",
         "Think of a time when you helped someone in need.",
         "Think of a time when you did something truly selfless."
     };
 
-    private string[] questions = {
+    private static readonly string[] questions = {
         "Why was this experience meaningful to you?",
         "Have you ever done anything like this before?",
         "How did you get started?",
@@ -19,29 +19,49 @@ public class ReflectionActivity : Activity
         "How can you keep this experience in mind in the future?"
     };
 
-    public ReflectionActivity()
+    public ReflectionActivity() : base("Reflection Activity", "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.")
     {
-        name = "Reflection";
-        description = "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.";
     }
 
-    protected override void RunActivity()
+    protected override void DoActivity(int duration)
     {
+        Console.WriteLine("Let's begin the reflection activity.");
+        Thread.Sleep(2000);
+
+        DateTime startTime = DateTime.Now;
         Random random = new Random();
-        int questionIndex = random.Next(0, prompts.Length);
 
-        for (int i = 0; i < duration; i += questions.Length)
+        while ((DateTime.Now - startTime).TotalSeconds < duration)
         {
-            Console.WriteLine(prompts[questionIndex]);
-            Pause(2);
+            DisplayPrompt(random);
+            AskQuestions();
+        }
+    }
 
-            foreach (string question in questions)
-            {
-                Console.WriteLine(question);
-                Pause(3);
-            }
+    private void DisplayPrompt(Random random)
+    {
+        string prompt = prompts[random.Next(prompts.Length)];
+        Console.WriteLine("\n" + prompt);
+        Thread.Sleep(2000);
+    }
 
-            questionIndex = random.Next(0, prompts.Length);
+    private void AskQuestions()
+    {
+        foreach (string question in questions)
+        {
+            DisplaySpinner();
+            Console.WriteLine(question);
+            Thread.Sleep(3000);
+        }
+    }
+
+    private void DisplaySpinner()
+    {
+        string[] spinners = { "|", "/", "-", "\\" };
+        foreach (string spinner in spinners)
+        {
+            Console.Write("\r" + spinner);
+            Thread.Sleep(200);
         }
     }
 }
